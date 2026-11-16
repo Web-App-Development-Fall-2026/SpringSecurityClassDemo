@@ -1,0 +1,180 @@
+<!-- ====================================================================== -->
+<!-- FILE 1: src/main/resources/templates/login.html                        -->
+<!-- ====================================================================== -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Spring Security Demo</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 320px; text-align: center; }
+        input { width: 100%; padding: 10px; margin: 8px 0; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        button { width: 100%; padding: 10px; background: #2563eb; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 8px; }
+        button:hover { background: #1d4ed8; }
+        .msg { padding: 8px; border-radius: 4px; margin-bottom: 10px; font-size: 0.9rem; }
+        .error { background: #fee2e2; color: #b91c1c; }
+        .success { background: #dcfce7; color: #15803d; }
+        a { color: #2563eb; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>Sign In</h2>
+
+    <div th:if="${param.error}" class="msg error">Invalid username or password.</div>
+    <div th:if="${param.logout}" class="msg success">You have been logged out.</div>
+    <div th:if="${param.registered}" class="msg success">Registration successful! Please log in.</div>
+
+    <form th:action="@{/login}" method="post">
+        <input type="text" name="username" placeholder="Username" required autofocus>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Log In</button>
+    </form>
+
+    <p style="margin-top: 1rem; font-size: 0.9rem;">
+        Don't have an account? <a th:href="@{/register}">Register here</a>
+    </p>
+</div>
+</body>
+</html>
+
+
+<!-- ====================================================================== -->
+<!-- FILE 2: src/main/resources/templates/register.html                     -->
+<!-- ====================================================================== -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - Spring Security Demo</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 320px; text-align: center; }
+        input { width: 100%; padding: 10px; margin: 8px 0; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        button { width: 100%; padding: 10px; background: #16a34a; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 8px; }
+        button:hover { background: #15803d; }
+        .msg { padding: 8px; border-radius: 4px; margin-bottom: 10px; font-size: 0.9rem; }
+        .error { background: #fee2e2; color: #b91c1c; }
+        a { color: #2563eb; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>Create Account</h2>
+
+    <div th:if="${error}" class="msg error" th:text="${error}"></div>
+
+    <form th:action="@{/register}" method="post">
+        <input type="text" name="username" placeholder="Choose a username" required autofocus>
+        <input type="password" name="password" placeholder="Choose a password" required>
+        <button type="submit">Register</button>
+    </form>
+
+    <p style="margin-top: 1rem; font-size: 0.9rem;">
+        Already have an account? <a th:href="@{/login}">Back to Login</a>
+    </p>
+</div>
+</body>
+</html>
+
+
+<!-- ====================================================================== -->
+<!-- FILE 3: src/main/resources/templates/home.html                         -->
+<!-- ====================================================================== -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome - Spring Security Demo</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 350px; text-align: center; }
+        .badge { display: inline-block; padding: 4px 10px; background: #dbeafe; color: #1e40af; border-radius: 12px; font-size: 0.85rem; font-weight: bold; margin-bottom: 10px; }
+        button { width: 100%; padding: 10px; background: #dc2626; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        button:hover { background: #b91c1c; }
+        .link-btn { display: block; padding: 10px; background: #e2e8f0; color: #1e293b; border-radius: 4px; text-decoration: none; margin-top: 10px; font-weight: bold; }
+        .link-btn:hover { background: #cbd5e1; }
+        .manager-btn { background: #fef3c7; color: #92400e; }
+        .admin-btn { background: #ede9fe; color: #5b21b6; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>Welcome, <span th:text="${username}">User</span>!</h2>
+    <div class="badge" th:text="${role}">ROLE_USER</div>
+    <p>You are authenticated with Spring Security.</p>
+
+    <!-- Shown ONLY to MANAGER and ADMIN -->
+    <a sec:authorize="hasAnyRole('MANAGER', 'ADMIN')" th:href="@{/manager}" class="link-btn manager-btn">
+        Manager Dashboard
+    </a>
+
+    <!-- Shown ONLY to ADMIN -->
+    <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin}" class="link-btn admin-btn">
+        Admin Dashboard
+    </a>
+
+    <a href="/h2-console" target="_blank" class="link-btn">Open H2 Database Console</a>
+
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Log Out</button>
+    </form>
+</div>
+</body>
+</html>
+
+
+<!-- ====================================================================== -->
+<!-- FILE 4: src/main/resources/templates/manager.html                      -->
+<!-- ====================================================================== -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manager Dashboard - Spring Security Demo</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 350px; text-align: center; border-top: 5px solid #d97706; }
+        .badge { display: inline-block; padding: 4px 10px; background: #fef3c7; color: #92400e; border-radius: 12px; font-size: 0.85rem; font-weight: bold; }
+        .link-btn { display: block; padding: 10px; background: #2563eb; color: white; border-radius: 4px; text-decoration: none; margin-top: 16px; font-weight: bold; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <span class="badge">MANAGER &amp; ADMIN AREA</span>
+    <h2>Manager Dashboard</h2>
+    <p>Hello, <strong th:text="${username}">Manager</strong>! Only users with <code>ROLE_MANAGER</code> or <code>ROLE_ADMIN</code> can access this page.</p>
+
+    <a th:href="@{/}" class="link-btn">Back to Home</a>
+</div>
+</body>
+</html>
+
+
+<!-- ====================================================================== -->
+<!-- FILE 5: src/main/resources/templates/admin.html                        -->
+<!-- ====================================================================== -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - Spring Security Demo</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 350px; text-align: center; border-top: 5px solid #7c3aed; }
+        .badge { display: inline-block; padding: 4px 10px; background: #ede9fe; color: #5b21b6; border-radius: 12px; font-size: 0.85rem; font-weight: bold; }
+        .link-btn { display: block; padding: 10px; background: #2563eb; color: white; border-radius: 4px; text-decoration: none; margin-top: 16px; font-weight: bold; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <span class="badge">ADMIN ONLY AREA</span>
+    <h2>Admin Dashboard</h2>
+    <p>Hello, <strong th:text="${username}">Admin</strong>! Only users with <code>ROLE_ADMIN</code> can access this page.</p>
+
+    <a th:href="@{/}" class="link-btn">Back to Home</a>
+</div>
+</body>
+</html>

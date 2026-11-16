@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - Spring Security Demo</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 350px; text-align: center; border-top: 5px solid #7c3aed; }
+        .badge { display: inline-block; padding: 4px 10px; background: #ede9fe; color: #5b21b6; border-radius: 12px; font-size: 0.85rem; font-weight: bold; }
+        .link-btn { display: block; padding: 10px; background: #2563eb; color: white; border-radius: 4px; text-decoration: none; margin-top: 16px; font-weight: bold; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <span class="badge">ADMIN ONLY AREA</span>
+    <h2>Admin Dashboard</h2>
+    <p>Hello, <strong th:text="${username}">Admin</strong>! Only users with <code>ROLE_ADMIN</code> can access this page.</p>
+
+    <a th:href="@{/}" class="link-btn">Back to Home</a>
+</div>
+</body>
+</html>
+

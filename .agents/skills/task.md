@@ -1,0 +1,12 @@
+- [x] Update `User.java` to standardize role parsing and authority generation
+- [x] Update `UserService.java` to support user registration, existence checks, and user list retrieval
+- [x] Update `DataLoader.java` to pre-populate both user and admin accounts
+- [x] Refactor `SecurityConfiguration.java` with path mappings, custom login/logout routes, and admin restrictions
+- [x] Create UI templates:
+  - [x] Custom login page (`login.html`)
+  - [x] Custom registration page (`register.html`)
+  - [x] Custom access denied page (`access-denied.html`)
+  - [x] Custom admin dashboard page (`admin.html`)
+- [x] Update `home.html` to show welcome banner and conditionally render admin link
+- [x] Refactor `WelcomePage.java` controller with endpoints for login, register, admin, and access-denied
+- [/] Verify the application by compiling, testing, and running
